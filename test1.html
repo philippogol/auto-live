@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<!--
+    MIAUUUUU
+
+    Copyright © 2016-2023 Threema GmbH (https://threema.ch/).
+
+    This file is part of Threema Web.
+
+    Threema Web is free software: you can redistribute it and/or modify it
+    under the terms of the GNU Affero General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or (at
+    your option) any later version.
+
+    This program is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+    General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with Threema Web. If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<html ng-strict-di ng-controller="StatusController as ctrl">
+<head ng-controller="HeaderController as hdrCtrl">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="no-referrer">
+    <meta name="google" content="notranslate">
+
+    <title>Threema Web</title>
+    <meta name="description" translate translate-attr-content="meta.DESCRIPTION"
+          content="Chat from your desktop with Threema Web and have full access to all chats, contacts and media files.">
+
+    <!-- Favicon / Webmanifest / Browserconfig -->
+    <link rel="apple-touch-icon" sizes="57x57" href="img/favicon/apple-icon-57x57.png?v=[[VERSION]]">
+    <link rel="apple-touch-icon" sizes="60x60" href="img/favicon/apple-icon-60x60.png?v=[[VERSION]]">
+    <link rel="apple-touch-icon" sizes="72x72" href="img/favicon/apple-icon-72x72.png?v=[[VERSION]]">
+    <link rel="apple-touch-icon" sizes="76x76" href="img/favicon/apple-icon-76x76.png?v=[[VERSION]]">
+    <link rel="apple-touch-icon" sizes="114x114" href="img/favicon/apple-icon-114x114.png?v=[[VERSION]]">
+    <link rel="apple-touch-icon" sizes="120x120" href="img/favicon/apple-icon-120x120.png?v=[[VERSION]]">
+    <link rel="apple-touch-icon" sizes="144x144" href="img/favicon/apple-icon-144x144.png?v=[[VERSION]]">
+    <link rel="apple-touch-icon" sizes="152x152" href="img/favicon/apple-icon-152x152.png?v=[[VERSION]]">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-icon-180x180.png?v=[[VERSION]]">
+    <link rel="icon" type="image/png" sizes="192x192"  href="img/favicon/android-icon-192x192.png?v=[[VERSION]]">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ 'img/favicon/' + ctrl.faviconFilename + '?v=[[VERSION]]' }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ 'img/favicon/' + ctrl.faviconFilename + '?v=[[VERSION]]' }}">
+    <link rel="manifest" href="manifest.webmanifest?v=[[VERSION]]">
+    <link rel="mask-icon" href="img/favicon/safari-pinned-tab.svg?v=[[VERSION]]" color="#333333">
+    <link rel="shortcut icon" href="img/favicon/favicon.ico?v=[[VERSION]]">
+    <meta name="msapplication-TileColor" content="#313131">
+    <meta name="msapplication-TileImage" content="img/favicon/ms-icon-144x144.png?v=[[VERSION]]">
+    <meta name="msapplication-config" content="browserconfig.xml?v=[[VERSION]]">
+    <meta name="theme-color" content="#4f4f4f">
+
+    <!-- Angular -->
+    <link rel="stylesheet" href="node_modules/angular/angular-csp.css?v=[[VERSION]]">
+
+    <!-- Third party stylesheets -->
+    <link rel="stylesheet" href="node_modules/angular-material/angular-material.min.css?v=[[VERSION]]">
+    <link rel="stylesheet" href="node_modules/croppie/croppie.css?v=[[VERSION]]">
+
+    <!-- Fonts -->
+    <link rel="stylesheet" ng-href="{{ hdrCtrl.fontUrl() }}" type="text/css" ng-if="hdrCtrl.useThreemaFont()">
+    <link rel="stylesheet" ng-href="fonts/roboto.css?v=[[VERSION]]" type="text/css" ng-if="!hdrCtrl.useThreemaFont()">
+    <link rel="stylesheet" href="fonts/material.css?v=[[VERSION]]" type="text/css">
+
+    <!-- Own stylesheets -->
+    <link rel="stylesheet" href="css/app.css?v=[[VERSION]]">
+</head>
+
+<body ng-controller="ThemeController as themeCtrl" class="{{ ctrl.statusClass }} {{ themeCtrl.userInterfaceClass }}" ng-class="{expanded: ctrl.expandStatusBar, messenger: ctrl.showMessenger()}" md-theme="{{ themeCtrl.theme }}">
+    <img src="img/bg.jpg?v=[[VERSION]]" aria-label="Background image: Blurred photo of a mountain" id="background-image" draggable="false">
+
+    <noscript class="compat compat-nojs">
+        <img class="logo-compat" src="img/logo.svg?v=[[VERSION]]"/>
+        <div>
+            <h2>Error: JavaScript not supported</h2>
+            <p>Please enable JavaScript in your browser to be able to use Threema Web.</p>
+        </div>
+    </noscript>
+
+    <div class="compat compat-js" style="display: none;">
+        <img class="logo-compat" src="img/logo.svg?v=[[VERSION]]"/>
+        <div class="wasm" style="display: none;">
+            <h2>Error: Browser not supported</h2>
+            <p>You are using a browser without <strong>WebAssembly</strong> support. Please
+            upgrade to the latest version of a
+            <a href="https://threema.ch/faq/web_requirements" target="_blank">supported browser</a>.</p>
+        </div>
+        <div class="textdecoder" style="display: none;">
+            <h2>Error: Browser not supported</h2>
+            <p>You are using a browser without <strong>TextDecoder</strong> support. Please
+            upgrade to the latest version of a
+            <a href="https://threema.ch/faq/web_requirements" target="_blank">supported browser</a>.</p>
+        </div>
+    </div>
+
+    <div id="main-wrapper" ng-cloak ng-class="{wide: ctrl.showMessenger()}">
+        <header>
+            <h1 id="title" aria-label="Threema Web Logo">
+                <span id="logo" ng-include src="'img/logo.svg?v=[[VERSION]]'"></span>
+            </h1>
+        </header>
+
+        <!-- The overlay box that shows up if media is previewed -->
+        <mediabox></mediabox>
+
+        <div id="main" translate-cloak>
+            <div id="status-bar">
+                <status-bar active="ctrl.expandStatusBar"></status-bar>
+            </div>
+            <div id="main-content" ui-view></div>
+        </div>
+        <footer ng-controller="FooterController as ctrl">
+            <ul translate-cloak>
+                <li><a ng-click="ctrl.showVersionInfo()" ng-keypress="ctrl.showVersionInfo($event)" tabindex="0">Version [[VERSION]] {{ ctrl.config.VERSION_MOUNTAIN }}</a></li>
+                <li><a href="https://threema.ch/threema-web" target="_blank" rel="noopener noreferrer" tabindex="0" translate>welcome.MORE_ABOUT_WEB</a></li>
+                <li><a ng-click="ctrl.showTroubleshooting()" ng-keypress="ctrl.showTroubleshooting($event)" translate>troubleshooting.TROUBLESHOOTING</a></li>
+                <li><a href="https://github.com/threema-ch/threema-web/blob/master/TRANSLATING.md" target="_blank" rel="noopener noreferrer" tabindex="0" translate>welcome.HELP_TRANSLATE</a></li>
+            </ul>
+        </footer>
+    </div>
+
+    <!-- Emoji -->
+    <link rel="stylesheet" href="emoji/activity.css?v=[[VERSION]]" type="text/css" media="all" />
+    <link rel="stylesheet" href="emoji/flags.css?v=[[VERSION]]" type="text/css" media="all" />
+    <link rel="stylesheet" href="emoji/food.css?v=[[VERSION]]" type="text/css" media="all" />
+    <link rel="stylesheet" href="emoji/nature.css?v=[[VERSION]]" type="text/css" media="all" />
+    <link rel="stylesheet" href="emoji/objects.css?v=[[VERSION]]" type="text/css" media="all" />
+    <link rel="stylesheet" href="emoji/people.css?v=[[VERSION]]" type="text/css" media="all" />
+    <link rel="stylesheet" href="emoji/symbols.css?v=[[VERSION]]" type="text/css" media="all" />
+    <link rel="stylesheet" href="emoji/travel.css?v=[[VERSION]]" type="text/css" media="all" />
+
+    <!-- Angular core -->
+    <script src="node_modules/angular/angular.js?v=[[VERSION]]"></script>
+    <script src="node_modules/angular-aria/angular-aria.min.js?v=[[VERSION]]"></script>
+    <script src="node_modules/angular-animate/angular-animate.min.js?v=[[VERSION]]"></script>
+    <script src="node_modules/angular-sanitize/angular-sanitize.min.js?v=[[VERSION]]"></script>
+    <script src="node_modules/angular-route/angular-route.min.js?v=[[VERSION]]"></script>
+
+    <!-- Polyfills -->
+    <script src="node_modules/webrtc-adapter/out/adapter.js?v=[[VERSION]]"></script>
+    <script src="node_modules/setimmediate/setImmediate.js?v=[[VERSION]]"></script>
+
+    <!-- Various libraries -->
+    <script src="node_modules/qrcode-generator/qrcode.js?v=[[VERSION]]"></script>
+    <script src="node_modules/qrcode-generator/qrcode_UTF8.js?v=[[VERSION]]"></script>
+    <script src="libs/angular-qrcode/angular-qrcode.js?v=[[VERSION]]"></script>
+    <script src="node_modules/angular-material/angular-material.min.js?v=[[VERSION]]"></script>
+    <script src="node_modules/@uirouter/angularjs/release/angular-ui-router.min.js?v=[[VERSION]]"></script>
+    <script src="node_modules/angularjs-scroll-glue/src/scrollglue.js?v=[[VERSION]]"></script>
+    <script src="libs/angular-inview/angular-inview.js?v=[[VERSION]]"></script>
+    <script src="libs/future.js?v=[[VERSION]]"></script>
+
+    <!-- Translation -->
+    <script src="node_modules/messageformat/messageformat.js?v=[[VERSION]]"></script>
+    <script src="node_modules/angular-translate/dist/angular-translate.min.js?v=[[VERSION]]"></script>
+    <script src="node_modules/angular-translate/dist/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js?v=[[VERSION]]"></script>
+    <script src="node_modules/angular-translate/dist/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.min.js?v=[[VERSION]]"></script>
+
+    <!-- Other -->
+    <script src="node_modules/msgpack-lite/dist/msgpack.min.js?v=[[VERSION]]"></script>
+    <script src="node_modules/tweetnacl/nacl-fast.min.js?v=[[VERSION]]"></script>
+    <script src="node_modules/@saltyrtc/chunked-dc/dist/chunked-dc.es5.js?v=[[VERSION]]"></script>
+    <script src="node_modules/@saltyrtc/client/dist/saltyrtc-client.es5.js?v=[[VERSION]]"></script>
+    <script src="node_modules/@saltyrtc/task-webrtc/dist/saltyrtc-task-webrtc.es5.js?v=[[VERSION]]"></script>
+    <script src="node_modules/@saltyrtc/task-relayed-data/dist/saltyrtc-task-relayed-data.es5.js?v=[[VERSION]]"></script>
+    <script src="node_modules/croppie/croppie.min.js?v=[[VERSION]]"></script>
+
+    <!-- App -->
+    <script src="userconfig.js?v=[[VERSION]]"></script>
+    <script src="userconfig.overrides.js?v=[[VERSION]]"></script>
+    <script src="app.bundle.js?v=[[VERSION]]"></script>
+    <script src="js/compat.js?v=[[VERSION]]"></script>
+
+</body>
+</html>
